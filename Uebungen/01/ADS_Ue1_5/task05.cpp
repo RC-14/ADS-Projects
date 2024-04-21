@@ -64,7 +64,7 @@ void DoubleStack::resize() {
 
 	m_size += m_allocation_size;
 
-	delete m_array;
+	delete[] m_array;
 	m_array = new_array;
 }
 
