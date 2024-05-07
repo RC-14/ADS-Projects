@@ -57,9 +57,19 @@ bool Ring::search(std::string symbolicData) {
 }
 
 void recPrint(RingNode* ptr, int i, bool first) {
+	if (first) {
+		std::cout
+			<< "Alter: " << ptr->getOldAge() << ", "
+			<< "Beschreibung: " << ptr->getDescription() << ", "
+			<< "Daten: " << ptr->getSymbolicData()
+			<< std::endl;
+	}
+
 	if (i > 1) recPrint(ptr->getNext(), i - 1, false);
 
-	if (!first) std::cout << "--------------------------" << std::endl;
+	if (first) return;
+
+	std::cout << "--------------------------" << std::endl;
 	std::cout
 		<< "Alter: " << ptr->getOldAge() << ", "
 		<< "Beschreibung: " << ptr->getDescription() << ", "
