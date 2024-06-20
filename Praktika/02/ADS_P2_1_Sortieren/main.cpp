@@ -1,0 +1,217 @@
+#define CATCH_CONFIG_RUNNER
+#include "catch.h"
+
+#include <iostream>
+#include <chrono>
+#include "sorting.h"
+
+using namespace std;
+
+//benchmark functions
+void benchmark_quicksort();
+void benchmark_mergesort();
+void benchmark_heapsort();
+void benchmark_shellsort_2n();
+
+int main(int argc, char** argv) {
+	Catch::Session().run();
+
+	std::cout << "\nPress Enter to run measurement" << std::endl;
+	std::cin.get();
+
+	benchmark_quicksort();
+	benchmark_mergesort();
+	benchmark_heapsort();
+	benchmark_shellsort_2n();
+
+	return 0;
+}
+
+//executes benchmark for quicksort
+void benchmark_quicksort() {
+	//file stream
+	ofstream quicksort_measurement;
+	quicksort_measurement.open("quicksort.txt", ios::out);
+
+	//benchmark parameters / variables
+	int n_start = 1000;
+	int n_step = 1000;
+	int n_end = 1000000;
+
+	vector<int> V;
+
+	//actual benchmark loop
+	for (int n = n_start; n <= n_end; n += n_step) {
+		//"progress bar"
+		std::cout << "Running Quicksort with n: " << n << std::endl;
+
+		chrono::steady_clock::time_point begin, end;
+		chrono::nanoseconds dtime = begin - begin; // 0 threw an error
+
+		for (int i = 0; i < 10; i++) {
+			//generate n random integers
+			sorting::randomizeVector(V, n);
+
+			//start measurement
+			begin = std::chrono::steady_clock::now();
+
+			//execzute sorting algorithm
+			sorting::QuickSort(V, 0, V.size() - 1);
+
+			//stop time
+			end = std::chrono::steady_clock::now();
+
+			dtime += end - begin;
+		}
+
+		dtime *= .1;
+
+		//write to file
+		quicksort_measurement << n << "\t" << setprecision(10) << scientific << dtime.count() << endl;
+	}
+
+	//close file handle
+	quicksort_measurement.close();
+}
+
+void benchmark_mergesort() {
+	//file stream
+	ofstream mergesort_measurement;
+	mergesort_measurement.open("mergesort.txt", ios::out);
+
+	//benchmark parameters / variables
+	int n_start = 1000;
+	int n_step = 1000;
+	int n_end = 1000000;
+
+	vector<int> V;
+	vector<int> temp_array;
+
+	//actual benchmark loop
+	for (int n = n_start; n <= n_end; n += n_step) {
+		//"progress bar"
+		std::cout << "Running Mergesort with n: " << n << std::endl;
+
+		chrono::steady_clock::time_point begin, end;
+		chrono::nanoseconds dtime = begin - begin; // 0 threw an error
+
+		for (int i = 0; i < 10; i++) {
+			//generate n random integers
+			sorting::randomizeVector(V, n);
+
+			//start measurement
+			begin = std::chrono::steady_clock::now();
+
+			//execzute sorting algorithm
+			temp_array.resize(V.size());
+			sorting::MergeSort(V, temp_array, 0, V.size() - 1);
+
+			//stop time
+			end = std::chrono::steady_clock::now();
+
+			dtime += end - begin;
+		}
+
+		dtime *= .1;
+
+		//write to file
+		mergesort_measurement << n << "\t" << setprecision(10) << scientific << dtime.count() << endl;
+	}
+
+	//close file handle
+	mergesort_measurement.close();
+
+}
+
+void benchmark_heapsort() {
+	//file stream
+	ofstream heapsort_measurement;
+	heapsort_measurement.open("heapsort.txt", ios::out);
+
+	//benchmark parameters / variables
+	int n_start = 1000;
+	int n_step = 1000;
+	int n_end = 1000000;
+
+	vector<int> V;
+
+	//actual benchmark loop
+	for (int n = n_start; n <= n_end; n += n_step) {
+		//"progress bar"
+		std::cout << "Running Heapsort with n: " << n << std::endl;
+
+		chrono::steady_clock::time_point begin, end;
+		chrono::nanoseconds dtime = begin - begin; // 0 threw an error
+
+		for (int i = 0; i < 10; i++) {
+			//generate n random integers
+			sorting::randomizeVector(V, n);
+
+			//start measurement
+			begin = std::chrono::steady_clock::now();
+
+			//execzute sorting algorithm
+			sorting::HeapSort(V, V.size());
+
+			//stop time
+			end = std::chrono::steady_clock::now();
+
+			dtime += end - begin;
+		}
+
+		dtime *= .1;
+
+		//write to file
+		heapsort_measurement << n << "\t" << setprecision(10) << scientific << dtime.count() << endl;
+	}
+
+	//close file handle
+	heapsort_measurement.close();
+
+}
+
+void benchmark_shellsort_2n() {
+	//file stream
+	ofstream shellsort_measurement;
+	shellsort_measurement.open("shellsort_2n.txt", ios::out);
+
+	//benchmark parameters / variables
+	int n_start = 1000;
+	int n_step = 1000;
+	int n_end = 1000000;
+
+	vector<int> V;
+
+	//actual benchmark loop
+	for (int n = n_start; n <= n_end; n += n_step) {
+		//"progress bar"
+		std::cout << "Running Shellsort_2n with n: " << n << std::endl;
+
+		chrono::steady_clock::time_point begin, end;
+		chrono::nanoseconds dtime = begin - begin; // 0 threw an error
+
+		for (int i = 0; i < 10; i++) {
+			//generate n random integers
+			sorting::randomizeVector(V, n);
+
+			//start measurement
+			begin = std::chrono::steady_clock::now();
+
+			//execzute sorting algorithm
+			sorting::ShellSort_2n(V, V.size());
+
+			//stop time
+			end = std::chrono::steady_clock::now();
+
+			dtime += end - begin;
+		}
+
+		dtime *= .1;
+
+		//write to file
+		shellsort_measurement << n << "\t" << setprecision(10) << scientific << dtime.count() << endl;
+	}
+
+	//close file handle
+	shellsort_measurement.close();
+}
